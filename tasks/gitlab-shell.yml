@@ -1,0 +1,13 @@
+---
+
+- name: get gitlab-shell
+  git: dest=/home/git/gitlab-shell repo={{ gitlab.shell_repo }} depth=1 update=yes version={{ gitlab.shell_version }}
+
+- name: chown gitlab-shell
+  file: path=/home/git/gitlab-shell owner=git group=git recurse=yes state=directory
+
+- name: create gitlab-shell config
+  template: files/gitlab-shell-config.yml dest=/home/git/gitlab-shell/config.yml owner=git group=git
+
+- name: install gitlab-shell
+  command: chdir=/home/git/gitlab-shell ./bin/install

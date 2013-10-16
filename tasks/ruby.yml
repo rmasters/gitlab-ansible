@@ -1,0 +1,23 @@
+---
+
+- name: remove ruby 1.8
+  apt: pkg=ruby1.8 state=absent
+
+# TODO: replace with rvm?
+- name: create tmp dir for ruby
+  file: path=/tmp/ruby state=directory
+
+- name: download ruby
+  get_url: url=http://cache.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p247.tar.gz dest=/tmp/ruby
+
+- name: untar ruby
+  command: chdir=/tmp/ruby tar xzf ruby-2.0.0-p247.tar.gz
+
+- command: chdir=/tmp/ruby/ruby-2.0.0-p247 ./configure
+
+- command: chdir=/tmp/ruby/ruby-2.0.0-p247 make
+
+- command: chdir=/tmp/ruby/ruby-2.0.0-p247 make install
+
+- name: install bundler
+  gem: name=bundler state=latest

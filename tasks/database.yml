@@ -1,0 +1,24 @@
+---
+
+# Hat-tip: http://www.blueleftistconstructor.com/2013/04/28/mariadb-adding-apt-gpg-key-when-using-ansible/
+- name: add repository key
+  apt_key: url=http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xcbcb082a1bb943db
+
+- name: add mariadb repository
+  apt_repository: repo="deb http://mirrors.coreix.net/mariadb/repo/10.0/ubuntu raring main" update_cache=yes
+
+- name: install mariadb
+  apt: pkg={{ item }}
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - libmariadbclient-dev
+
+- name: create mysql user
+  mysql_user: host=localhost name=gitlab password={{ gitlab.db_pass }} 
+
+- name: create mysql db
+  mysql_db: name=gitlabhq_production collation=utf8_unicode_ci encoding=utf8
+
+ -name: grant privs to gitlab@localhost
+  mysql_user: name=gitlab host=lcoalhost apprend_privs=yes priv="gitlabhq_production.*:SELECT,LOCK TABLES,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX,ALTER"

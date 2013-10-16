@@ -1,0 +1,39 @@
+---
+
+- name: update and upgrade
+  apt: update_cache=yes upgrade=yes
+
+- name: install dependencies
+  apt: pkg={{ item }}
+  with_items:
+    - sudo
+    - build-essential
+    - zlib1g-dev
+    - libyaml-dev
+    - libssl-dev
+    - libgdbm-dev
+    - libreadline-dev
+    - libncurses5-dev
+    - libffi-dev
+    - curl
+    - git-core
+    - openssh-server
+    - redis-server
+    - checkinstall
+    - libxml2-dev
+    - libxslt1-dev
+    - libcurl4-openssl-dev
+    - libicu-dev
+    - logrotate
+    - python
+    - python-docutils
+    - postfix
+
+# TODO: Assert Python is >= 2.5 < 3
+
+- include: ruby.yml
+- include: users.yml
+- include: gitlab-shell.yml
+- include: database.yml
+#- include: gitlab.yml
+#- include: nginx.yml

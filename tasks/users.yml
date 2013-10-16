@@ -1,0 +1,4 @@
+---
+
+- name: create gitlab user
+  user: name=git comment=GitLab shell=/bin/nologin
